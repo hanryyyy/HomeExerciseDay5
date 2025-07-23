@@ -2,8 +2,8 @@
 // hàm `session_id()` sẽ trả về giá trị SESSION_ID (tên file session do Web Server tự động tạo)
 // - Nếu trả về Rỗng hoặc NULL => chưa có file Session tồn tại
 if (session_id() === '') {
-  // Yêu cầu Web Server tạo file Session để lưu trữ giá trị tương ứng với CLIENT (Web Browser đang gởi Request)
-  session_start();
+    // Yêu cầu Web Server tạo file Session để lưu trữ giá trị tương ứng với CLIENT (Web Browser đang gởi Request)
+    session_start();
 }
 ?>
 
@@ -13,7 +13,7 @@ if (session_id() === '') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NenTang.vn</title>
+    <title>DASHBOARD</title>
 
     <!-- Nhúng file Quản lý các Liên kết CSS dùng chung cho toàn bộ trang web -->
     <?php include_once(__DIR__ . '/../layouts/styles.php'); ?>
@@ -115,7 +115,7 @@ if (session_id() === '') {
     <!-- Liên kết thư viện ChartJS -->
     <!-- <script src="/php/myhand/assets/vendor/Chart.js/Chart.min.js"></script> -->
     <script>
-    $(document).ready(function() {});
+        $(document).ready(function() {});
     </script>
 </body>
 
