@@ -1,15 +1,19 @@
 <?php
 session_start();
 if (isset($_SESSION['user_id'])) {
-    header('Location: /demoshop/frontend/index.php');
+    // Nếu có redirect thì chuyển về trang đó
+    if (isset($_GET['redirect']) && $_GET['redirect'] === 'admin') {
+        header('Location: /demoshop/frontend/pages/admin.php');
+    } else {
+        header('Location: /demoshop/frontend/index.php');
+    }
     exit();
 }
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     include_once(__DIR__ . '/../../dbconnect.php');
     $username = $_POST['username'];
     $password = $_POST['password'];
-    $sql = "SELECT id, username, password FROM users WHERE username =
-?";
+    $sql = "SELECT id, username, password FROM users WHERE username = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param('s', $username);
     $stmt->execute();
@@ -19,7 +23,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if (password_verify($password, $user['password'])) {
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['username'] = $user['username'];
-            header('Location: /demoshop/frontend/index.php');
+            // Nếu có redirect thì chuyển về trang đó
+            if (isset($_GET['redirect']) && $_GET['redirect'] === 'admin') {
+                header('Location: /demoshop/frontend/pages/admin.php');
+            } else {
+                header('Location: /demoshop/frontend/index.php');
+            }
             exit();
         } else {
             $error = "Invalid Username or Password!";
@@ -39,9 +48,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <title>Login</title>
     <?php include_once(__DIR__ . '/../layouts/styles.php'); ?>
     <style>
-    body {
-        background-color: #f5f5f5;
-    }
+        body {
+            background-color: #f5f5f5;
+        }
     </style>
 </head>
 
@@ -50,9 +59,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <div class="col-md-6 bg-white p-4 rounded shadow-sm">
             <h2 class="text-center">Login</h2>
             <?php if (isset($error)) : ?>
-            <div class="error-message">
-                <?= $error ?>
-            </div>
+                <div class="error-message">
+                    <?= $error ?>
+                </div>
             <?php endif; ?>
             <form method="POST">
                 <div class="form-group">
@@ -63,8 +72,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <label for="password" class="form-label">Password</label>
                     <input type="password" id="password" name="password" class="form-control" required />
                 </div>
-                <button type="submit" class="btn btn-primary">Login</button>
                 <div class="mb-5"></div>
+                <button type="submit" class="btn btn-primary">Login</button>
+
             </form>
             <p class="text-center mt-3">Not a memeber? <a href="/demoshop/frontend/pages/register.php">Register</a>
             </p>

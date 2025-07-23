@@ -19,28 +19,26 @@
                 <a class="nav-link" href="/demoshop/frontend/pages/viewCart.php">Cart</a>
             </li>
         </ul>
+        <?php
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        ?>
         <ul class="navbar-nav px-3 ml-auto">
-            <?php
-            // Đã đăng nhập rồi -> hiển thị tên Người dùng và menu Đăng xuất
-            if (
-                isset($_SESSION['kh_tendangnhap_logged']) &&
-                !empty($_SESSION['kh_tendangnhap_logged'])
-            ) :
-            ?>
-            <li class="nav-item text-nowrap">
-                <a class="nav-link">Welcome <?=
-                                                $_SESSION['kh_tendangnhap_logged']; ?></a>
-            </li>
-            <li class="nav-item text-nowrap">
-                <a class="nav-link" href="/demoshop/frontend/pages/logout.php">Logout</a>
-            </li>
-            <?php else : ?>
-            <li class="nav-item text-nowrap">
-                <a class="nav-link" href="/demoshop/frontend/pages/login.php">Login</a>
-            </li>
-            <li class="nav-item text-nowrap">
-                <a class="nav-link" href="/demoshop/frontend/pages/register.php">Register</a>
-            </li>
+            <?php if (isset($_SESSION['user_id'])): ?>
+                <li class="nav-item text-nowrap">
+                    <a class="nav-link">Welcome <?= htmlspecialchars($_SESSION['username']); ?></a>
+                </li>
+                <li class="nav-item text-nowrap">
+                    <a class="nav-link" href="/demoshop/frontend/pages/logout.php">Logout</a>
+                </li>
+            <?php else: ?>
+                <li class="nav-item text-nowrap">
+                    <a class="nav-link" href="/demoshop/frontend/pages/login.php">Login</a>
+                </li>
+                <li class="nav-item text-nowrap">
+                    <a class="nav-link" href="/demoshop/frontend/pages/register.php">Register</a>
+                </li>
             <?php endif; ?>
         </ul>
     </div>
