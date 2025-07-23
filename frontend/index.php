@@ -146,34 +146,40 @@ session_start();
                 ?>
 
                 <?php foreach ($products as $prod): ?>
-                <div class="col">
-                    <div class="card shadow-sm h-100">
-                        <!-- Click vào ảnh chuyển trang -->
-                        <a href="pagedetail.php?id=<?= $prod['id'] ?>">
-                            <img src="/demoshop/assets/<?= $prod['image_url'] ?>" class="card-img-top"
-                                alt="<?= htmlspecialchars($prod['name']) ?>" style="height: 200px; object-fit: cover;">
-                        </a>
+                    <div class="col">
+                        <div class="card shadow-sm h-100">
+                            <!-- Click vào ảnh chuyển trang -->
+                            <a href="pagedetail.php?id=<?= $prod['id'] ?>">
+                                <img src="/demoshop/assets/<?= $prod['image_url'] ?>" class="card-img-top"
+                                    alt="<?= htmlspecialchars($prod['name']) ?>" style="height: 200px; object-fit: cover;">
+                            </a>
 
-                        <div class="card-body">
-                            <!-- Click vào tên sản phẩm chuyển trang -->
-                            <h5 class="card-title">
-                                <a href="/demoshop/frontend/pages/detail.php?id=<?= $prod['id'] ?>"
-                                    class="text-decoration-none text-dark">
-                                    <?= htmlspecialchars($prod['name']) ?>
-                                </a>
-                            </h5>
-                            <p class="card-text text-muted">$<?= number_format($prod['price'], 2) ?></p>
-
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="btn-group">
+                            <div class="card-body">
+                                <!-- Click vào tên sản phẩm chuyển trang -->
+                                <h5 class="card-title">
                                     <a href="/demoshop/frontend/pages/detail.php?id=<?= $prod['id'] ?>"
-                                        class="btn btn-sm btn-outline-primary">View details</a>
+                                        class="text-decoration-none text-dark">
+                                        <?= htmlspecialchars($prod['name']) ?>
+                                    </a>
+                                </h5>
+                                <p class="card-text text-muted">vnđ <?= number_format($prod['price'], 2) ?></p>
+
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="btn-group">
+                                        <a href="/demoshop/frontend/pages/detail.php?id=<?= $prod['id'] ?>"
+                                            class="btn btn-sm btn-outline-primary">View details</a>
+                                        <button class="btn btn-sm btn-success btn-add-cart" data-id="<?= $prod['id'] ?>"
+                                            data-name="<?= htmlspecialchars($prod['name']) ?>"
+                                            data-price="<?= $prod['price'] ?>" data-image="<?= $prod['image_url'] ?>"
+                                            data-category="" data-quantity="1" title="Add to Cart">
+                                            <i class="fa fa-cart-plus"></i>
+                                        </button>
+                                    </div>
+                                    <small class="text-muted">New</small>
                                 </div>
-                                <small class="text-muted">New</small>
                             </div>
                         </div>
                     </div>
-                </div>
                 <?php endforeach; ?>
 
             </div>
@@ -185,9 +191,9 @@ session_start();
                     <a class="page-link" href="?page=<?= $page - 1 ?>" tabindex="-1">Previous</a>
                 </li>
                 <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-                <li class="page-item<?= $i == $page ? ' active' : '' ?>">
-                    <a class="page-link" href="?page=<?= $i ?>"><?= $i ?></a>
-                </li>
+                    <li class="page-item<?= $i == $page ? ' active' : '' ?>">
+                        <a class="page-link" href="?page=<?= $i ?>"><?= $i ?></a>
+                    </li>
                 <?php endfor; ?>
                 <li class="page-item<?= $page >= $totalPages ? ' disabled' : '' ?>">
                     <a class="page-link" href="?page=<?= $page + 1 ?>">Next</a>
@@ -199,6 +205,36 @@ session_start();
 
     <?php include_once(__DIR__ . '/layouts/partials/footer.php'); ?>
     <?php include_once(__DIR__ . '/layouts/scripts.php'); ?>
+    <script>
+        $(document).ready(function() {
+            $('.btn-add-cart').click(function(e) {
+                e.preventDefault();
+                // Kiểm tra đăng nhập
+                <?php if (!isset($_SESSION['user_id'])): ?>
+                    window.location.href = "/demoshop/frontend/pages/login.php";
+                    return;
+                <?php endif; ?>
+
+                // Lấy dữ liệu sản phẩm
+                var data = {
+                    id: $(this).data('id'),
+                    name: $(this).data('name'),
+                    price: $(this).data('price'),
+                    image: $(this).data('image'),
+                    category: $(this).data('category'),
+                    quantity: $(this).data('quantity')
+                };
+
+                $.ajax({
+                    url: '/demoshop/frontend/API/addCart.php',
+                    method: "POST",
+                    dataType: 'json',
+                    data: data
+                    // Không cần xử lý success/error để hiện thông báo
+                });
+            });
+        });
+    </script>
 </body>
 
 </html>

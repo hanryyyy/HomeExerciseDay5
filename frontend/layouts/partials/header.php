@@ -7,7 +7,7 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-                <a class="nav-link" href="/demoshop/backend/pages/dashboard.php">Admin</a>
+                <a class="nav-link" href="/demoshop/frontend/pages/admin.php">Admin</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/demoshop/frontend/pages/about.php">About</a>

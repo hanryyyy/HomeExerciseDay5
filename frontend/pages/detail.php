@@ -110,6 +110,12 @@ include_once(__DIR__ . '/../../dbconnect.php');
             $conn->close();
             ?>
             <div class="card">
+                <!-- Hidden inputs for JS -->
+                <input type="hidden" id="id" value="<?= $prod[0] ?>">
+                <input type="hidden" id="name" value="<?= htmlspecialchars($prod[1]) ?>">
+                <input type="hidden" id="price" value="<?= $prod[2] ?>">
+                <input type="hidden" id="image" value="<?= $prod[5] ?>">
+                <input type="hidden" id="category" value="<?= htmlspecialchars($prod[6]) ?>">
                 <div class="row">
                     <div class="col-md-6 preview">
                         <div class="preview-pic">
@@ -192,21 +198,32 @@ include_once(__DIR__ . '/../../dbconnect.php');
             quantity: $('#quantity').val()
         };
         $.ajax({
-            url: '/demoshop/frontend/api/addCart.php',
+            url: '/demoshop/frontend/API/addCart.php',
             method: "POST",
             dataType: 'json',
             data: data,
             success: function(data) {
-                var htmlString = `Product added to Cart. <a
-href="/demoshop/frontend/pages/viewCart.php">View Cart</a>.`;
+                var htmlString = `
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>Product added to cart!</strong>
+            <a href="/demoshop/frontend/pages/viewCart.php" class="alert-link">View Cart</a>.
+            <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    `;
                 $('#message').html(htmlString);
-                $('.alert').removeClass('dnone').addClass('show');
             },
             error: function(jqXHR, textStatus, errorThrown) {
-                var htmlString = `<h1>Cannot process your
-request</h1>`;
+                var htmlString = `
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>Cannot process your request.</strong> Please try again later.
+            <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    `;
                 $('#message').html(htmlString);
-                $('.alert').removeClass('dnone').addClass('show');
             }
 
         });
